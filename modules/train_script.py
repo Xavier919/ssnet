@@ -10,7 +10,7 @@ import torch.nn as nn
 import argparse
 import time
 import pickle
-from torchmetrics.audio import SignalNoiseRatio
+from torchmetrics.audio import SignalNoiseRatio, ScaleInvariantSignalNoiseRatio
 from model import ssnet
 from sampler import Samples
 from utils import utility_fct
@@ -58,6 +58,7 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     loss_function = SignalNoiseRatio().to(device)
+    #loss_function = ScaleInvariantSignalNoiseRatio().to(device)
 
 
     start_time = time.time()
@@ -76,7 +77,7 @@ if __name__ == "__main__":
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             optimizer.step()
-            train_losses.append(loss)
+            train_losses.append(loss.detach().numpy())
         print(np.mean(train_losses))
         
         ssnet_.eval()
@@ -88,7 +89,7 @@ if __name__ == "__main__":
             out = ssnet_(X)
             loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
-            valid_losses.append(loss)
+            valid_losses.append(loss.detach().numpy())
         print(np.mean(valid_losses))
 
         if np.mean(valid_losses) < best_model:
