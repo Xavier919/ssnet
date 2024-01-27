@@ -19,8 +19,8 @@ writer = SummaryWriter()
 valid_writer = SummaryWriter()
 
 parser = argparse.ArgumentParser()
-parser.add_argument('train_split')
-parser.add_argument('valid_split')
+parser.add_argument('train', type=str)
+parser.add_argument('valid', type=str)
 parser.add_argument('batch_size', type=int)
 parser.add_argument('epochs', type=int)
 parser.add_argument('lr', type=float)
@@ -31,11 +31,11 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
 
-    X_train, y_train = pickle.load(open('train_set.pkl', 'rb'))
-    X_valid, y_valid = pickle.load(open('valid_set.pkl', 'rb'))
+    train = pickle.load(open(args.train, 'rb'))
+    valid = pickle.load(open(args.valid, 'rb'))
 
-    X_train, y_train = args.train_split
-    X_valid, y_valid = args.valid_split
+    X_train, y_train = train
+    X_valid, y_valid = valid
 
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -52,8 +52,8 @@ if __name__ == "__main__":
     train_set = Samples(X_train, y_train)
     valid_set = Samples(X_valid, y_valid)
 
-    train_loader = DataLoader(train_set, collate_fn=utility_fct, batch_size=args.batch_size)
-    valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size)
+    train_loader = DataLoader(train_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
+    valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     loss_function = nn.MSELoss(reduction='mean').to(device)
