@@ -15,7 +15,7 @@ def process_audio(mus, tag, frame_length=30000, max_audio_length=9000000):
     targets = []
 
     # Iterate through each track in the dataset
-    for track in tqdm(mus):
+    for track in mus:
         # Get the mixture audio and the target stem
         mixture_audio = track.stems[0]
         target_stem = track.stems[4]
