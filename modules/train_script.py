@@ -4,12 +4,12 @@ import torch
 from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch import nn
-import pickle
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 import torch.nn as nn
 import argparse
 import time
+import pickle
 from modules.model import ssnet
 from modules.sampler import Samples
 from modules.utils import utility_fct, get_loss
@@ -30,6 +30,9 @@ args = parser.parse_args()
 
 
 if __name__ == "__main__":
+
+    X_train, y_train = pickle.load(open('train_set.pkl', 'rb'))
+    X_valid, y_valid = pickle.load(open('valid_set.pkl', 'rb'))
 
     X_train, y_train = args.train_split
     X_valid, y_valid = args.valid_split
