@@ -13,7 +13,7 @@ import pickle
 from torchmetrics.audio import SignalNoiseRatio
 from model import ssnet
 from sampler import Samples
-from utils import utility_fct, get_loss
+from utils import utility_fct
 
 
 writer = SummaryWriter()

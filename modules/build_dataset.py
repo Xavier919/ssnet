@@ -1,5 +1,6 @@
 import torch
 import pickle
+from utils import transform
 
 
 def process_audio(mus, tag, frame_length=30000, max_audio_length=9000000):
@@ -27,8 +28,9 @@ def process_audio(mus, tag, frame_length=30000, max_audio_length=9000000):
         # Iterate over the audio in chunks of 'frame_length'
         for start_idx in range(0, mixture_audio.shape[0] - frame_length + 1, frame_length):
             # Extract the frames for mixture and target
-            mixture_frame = torch.tensor(mixture_audio[start_idx:start_idx+frame_length]).T.float().view(1, 2, -1)
-            target_frame = torch.tensor(target_stem[start_idx:start_idx+frame_length]).T.float().view(1, 2, -1)
+
+            mixture_frame = transform(mixture_audio[start_idx:start_idx+frame_length])
+            target_frame = transform(target_stem[start_idx:start_idx+frame_length])
 
             # Append the frames as a tuple to the dataset list
             samples.append(mixture_frame)
