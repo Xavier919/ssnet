@@ -10,6 +10,7 @@ import torch.nn as nn
 import argparse
 import time
 import pickle
+from torchmetrics.audio import SignalNoiseRatio
 from model import ssnet
 from sampler import Samples
 from utils import utility_fct, get_loss
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     else:
         print("Using CPU")
 
-    ssnet_ = ssnet().float().to(device)
+    ssnet_ = ssnet().to(device)
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
         ssnet_ = nn.DataParallel(ssnet_) 
@@ -56,7 +57,8 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    loss_function = nn.MSELoss(reduction='mean').to(device)
+    loss_function = SignalNoiseRatio().to(device)
+
 
     start_time = time.time()
 
@@ -70,7 +72,7 @@ if __name__ == "__main__":
             y = y.view(size,2,-1).cuda()
             out = ssnet_(X)
             ssnet_.zero_grad()
-            loss = get_loss(X, y, out, loss_function)
+            loss = loss_function(out, y)
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             optimizer.step()
@@ -84,7 +86,7 @@ if __name__ == "__main__":
             X = X.view(size,2,-1).cuda()
             y = y.view(size,2,-1).cuda()
             out = ssnet_(X)
-            loss = get_loss(X, y, out, loss_function)
+            loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss)
         print(np.mean(valid_losses))
