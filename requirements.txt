@@ -1,6 +1,6 @@
-numpy==1.26.3
-torch==2.1.0
-torchvision==0.15.2
-scipy==1.11.4
-matplotlib==3.8.2
-musdb==0.4.2 
+numpy
+torch
+torchvision
+scipy
+matplotlib
+musdb
