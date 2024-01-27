@@ -35,6 +35,6 @@ def process_audio(mus, tag, frame_length=30000, max_audio_length=9000000):
             samples.append(mixture_frame)
             targets.append(target_frame)
     
-    pickle.dump(zip(samples, targets), open(f'datasets/{tag}.pkl', 'wb'))
+    pickle.dump(zip(samples, targets), open(f'{tag}.pkl', 'wb'))
 
     return samples, targets
