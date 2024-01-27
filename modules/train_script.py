@@ -10,9 +10,9 @@ import torch.nn as nn
 import argparse
 import time
 import pickle
-from modules.model import ssnet
-from modules.sampler import Samples
-from modules.utils import utility_fct, get_loss
+from model import ssnet
+from sampler import Samples
+from utils import utility_fct, get_loss
 
 
 writer = SummaryWriter()
