@@ -16,7 +16,7 @@ from utils import utility_fct
 parser = argparse.ArgumentParser()
 parser.add_argument('data_path', type=str)
 parser.add_argument('batch_size', type=int)
-parser.add_argument('model')
+parser.add_argument('model', type=str)
 args = parser.parse_args()
 
 if __name__ == "__main__":
