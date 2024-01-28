@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    ssnet_ = ssnet(k=args.kernel).to(device)
+    ssnet_ = ssnet().to(device)
     
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
