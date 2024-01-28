@@ -4,3 +4,5 @@ torchvision
 scipy
 matplotlib
 musdb
+tensorboard
+torchmetrics
