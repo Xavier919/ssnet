@@ -15,3 +15,6 @@ def utility_fct(Xy):
 
 def transform(x):
     return torch.tensor(x).T.float()
+
+def crop(x, pad):
+    return [i[:, pad:-pad] for i in x]
