@@ -49,3 +49,5 @@ if __name__ == "__main__":
         out, y = out.cpu().detach().numpy(), y.cpu().detach().numpy()
         for frag in zip(out,y):
             results.append(frag)
+
+    pickle.dump(results, open('results.pkl', 'wb'))
