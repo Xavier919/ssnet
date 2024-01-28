@@ -21,7 +21,7 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
 
-    test = pickle.load(open(args.test, 'rb'))
+    test = pickle.load(open(args.data_path, 'rb'))
     X_test, y_test = test
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
