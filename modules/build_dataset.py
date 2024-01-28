@@ -3,7 +3,7 @@ import pickle
 from utils import transform
 
 
-def process_audio(mus, tag, frame_length=100000, max_audio_length=100000000):
+def process_audio(mus, tag, frame_length=30000, max_audio_length=100000000):
     """
     Processes an audio dataset to extract frames of audio and corresponding targets.
 
