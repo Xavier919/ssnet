@@ -77,7 +77,7 @@ if __name__ == "__main__":
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             optimizer.step()
-            train_losses.append(loss.detach().numpy())
+            train_losses.append(loss.cpu().detach().numpy())
         print(np.mean(train_losses))
         
         ssnet_.eval()
@@ -89,7 +89,7 @@ if __name__ == "__main__":
             out = ssnet_(X)
             loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
-            valid_losses.append(loss.detach().numpy())
+            valid_losses.append(loss.cpu().detach().numpy())
         print(np.mean(valid_losses))
 
         if np.mean(valid_losses) < best_model:
