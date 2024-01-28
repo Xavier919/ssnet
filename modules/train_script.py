@@ -58,8 +58,6 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    #loss_function = SignalNoiseRatio().to(device)
-    #loss_function = ScaleInvariantSignalNoiseRatio().to(device)
     loss_function = MSELoss(reduction='mean').to(device)
 
 

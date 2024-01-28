@@ -29,8 +29,6 @@ class ssnet(nn.Module):
         self.upsample3 = nn.ConvTranspose1d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
         self.upsample2 = nn.ConvTranspose1d(in_channels=128, out_channels=64, kernel_size=2, stride=2)
         self.upsample1 = nn.ConvTranspose1d(in_channels=64, out_channels=32, kernel_size=2, stride=2)
-        #output function
-        self.sigmoid = nn.Sigmoid()
 
     def crop(self, x, enc_ftrs):
         chs, dims = x.shape[1:]
@@ -65,29 +63,25 @@ class ssnet(nn.Module):
         #decoder layer 4
         upsamp4 = self.upsample4(x)
         upsamp4 = F.interpolate(upsamp4, block4.shape[2])
-        cropped4 = self.crop(upsamp4, block4)
-        cat4 = torch.cat((upsamp4, cropped4), 1)
+        cat4 = torch.cat((upsamp4, block4), 1)
         x = self.dconv4(cat4)
         
         #decoder layer 3
         upsamp3 = self.upsample3(x)
         upsamp3 = F.interpolate(upsamp3, block3.shape[2])
-        cropped3 = self.crop(upsamp3, block3)
-        cat3 = torch.cat((upsamp3, cropped3), 1)
+        cat3 = torch.cat((upsamp3, block3), 1)
         x = self.dconv3(cat3)
 
         #decoder layer 2
         upsamp2 = self.upsample2(x)
         upsamp2 = F.interpolate(upsamp2, block2.shape[2])
-        cropped2 = self.crop(upsamp2, block2)
-        cat2 = torch.cat((upsamp2, cropped2), 1)
+        cat2 = torch.cat((upsamp2, block2), 1)
         x = self.dconv2(cat2)
 
         #decoder layer 1
         upsamp1 = self.upsample1(x)
         upsamp1 = F.interpolate(upsamp1, block1.shape[2])
-        cropped1 = self.crop(upsamp1, block1)
-        cat1 = torch.cat((upsamp1, cropped1), 1)
+        cat1 = torch.cat((upsamp1, block1), 1)
         x = self.dconv1(cat1)
 
         #decoder layer f (final layer)
