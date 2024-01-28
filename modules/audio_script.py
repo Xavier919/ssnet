@@ -39,7 +39,13 @@ if __name__ == "__main__":
 
     test_loader = DataLoader(test_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
-
+    ssnet_.eval()
+    for X, y in test_loader:
+        size = len(X)
+        X = X.view(size,2,-1).cuda()
+        y = y.view(size,2,-1).cuda()
+        out = ssnet_(X)
+        out = out.cpu().detach().numpy()
 
 
     #sample_rate = 44100  
