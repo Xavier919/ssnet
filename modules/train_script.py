@@ -67,9 +67,8 @@ if __name__ == "__main__":
         ssnet_.train()
         train_losses = []
         for X, y in train_loader:
-            size = len(X)
-            X = X.view(size,2,-1).cuda()
-            y = y.view(size,4,2,-1).cuda()
+            X = X.cuda()
+            y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
             ssnet_.zero_grad()
             loss = loss_function(out, y)
@@ -82,9 +81,8 @@ if __name__ == "__main__":
         ssnet_.eval()
         valid_losses = []
         for X, y in valid_loader:
-            size = len(X)
-            X = X.view(size,2,-1).cuda()
-            y = y.view(size,4,2,-1).cuda()
+            X = X.cuda()
+            y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
             loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
