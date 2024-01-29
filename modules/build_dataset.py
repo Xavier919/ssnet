@@ -1,7 +1,7 @@
 import torch
 import pickle
 import numpy as np
-from modules.utils import transform
+from utils import transform
 
 
 def process_audio(mus, tag, frame_length=30000, max_length=10000000):
@@ -31,7 +31,7 @@ def process_audio(mus, tag, frame_length=30000, max_length=10000000):
             continue
 
         # Iterate over the audio in chunks of 'frame_length'
-        for start_idx in range(0, mixture_audio.shape[0] - frame_length + 1, frame_length):
+        for start_idx in range(0, mixture_audio.shape[1] - frame_length + 1, frame_length):
             # Extract the frames for mixture and target
 
             mixture_frame = transform(mixture_audio[start_idx:start_idx+frame_length])

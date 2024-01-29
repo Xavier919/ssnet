@@ -1,7 +1,7 @@
 import musdb
 import os
 import argparse
-from modules.build_dataset import process_audio
+from build_dataset import process_audio
 
 parser = argparse.ArgumentParser()
 parser.add_argument('data_path', type=str)
