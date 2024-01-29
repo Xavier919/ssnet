@@ -31,7 +31,7 @@ def process_audio(mus, tag, frame_length=50000):
         for start_idx in range(0, mixture_audio.shape[1] - frame_length + 1, frame_length):
             # Extract the frames for mixture and target
 
-            mixture_frame = transform(mixture_audio[start_idx:start_idx+frame_length])
+            mixture_frame = transform(mixture_audio[:, start_idx:start_idx+frame_length])
             target_frame = transform(target[:,:,start_idx:start_idx+frame_length])
 
             # Append the frames as a tuple to the dataset list
