@@ -16,6 +16,8 @@ parser.add_argument('batch_size', type=int)
 parser.add_argument('model', type=str)
 args = parser.parse_args()
 
+snr = SignalNoiseRatio()
+
 if __name__ == "__main__":
 
     test = pickle.load(open(args.data_path, 'rb'))
@@ -42,7 +44,17 @@ if __name__ == "__main__":
         X = X.cuda()
         out = ssnet_(X)[:,:,:,100:-100]
         out = out.cpu().detach().numpy()
-        for frag in zip(out,y):
-            results.append(frag)
-
-    pickle.dump(results, open('results.pkl', 'wb'))
+        for out_i, y_i in (out,y):
+            out_s1, y_s1 = out_i[:,0,:,:], y_i[:,0,:,:]
+            out_s2, y_s2 = out_i[:,1,1,:,:], y_i[:,1,:,:]
+            out_s3, y_s3 = out_i[:,2,:,:], y_i[:,2,:,:]
+            out_s4, y_s4 = out_i[:,3,:,:], y_i[:,3,:,:]
+            snr1 = snr(out_s1, y_s1)
+            snr2 = snr(out_s2, y_s2)
+            snr3 = snr(out_s3, y_s3)
+            snr4 = snr(out_s4, y_s4)
+            results.append((snr1,snr2,snr3,snr4))
+    print(f'SNR for source 1 (drums): {[np.mean(x[0]) for x in results]}')
+    print(f'SNR for source 2 (bass): {[np.mean(x[1]) for x in results]}')
+    print(f'SNR for source 3 (rest of accompaniment): {[np.mean(x[2]) for x in results]}')
+    print(f'SNR for source 4 (vocals): {[np.mean(x[3]) for x in results]}')
