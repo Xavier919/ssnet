@@ -1,11 +1,8 @@
 import torch
 
 def pad_seqs(seqs, num_chan, num_pad=100):
-    pad_seqs = []
-    for seq in seqs:
-        pad = torch.zeros(num_chan, num_pad)
-        pad_seq = torch.cat([pad, seq, pad], dim=1)
-        pad_seqs.append(pad_seq)
+    pad = torch.zeros(num_chan, num_pad)
+    pad_seqs = [torch.cat([pad, x, pad], dim=1) for x in seqs]
     return torch.stack(pad_seqs, dim=0)
 
 def utility_fct(Xy):
