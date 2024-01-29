@@ -25,7 +25,7 @@ def process_audio(mus, tag, frame_length=30000):
         t2 = track.stems[2].T
         t3 = track.stems[3].T
         t4 = track.stems[4].T
-        target = np.stack(t1,t2,t3,t4)
+        target = np.stack([t1,t2,t3,t4])
 
 
         # Iterate over the audio in chunks of 'frame_length'
