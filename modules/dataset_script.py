@@ -6,7 +6,6 @@ from build_dataset import process_audio
 parser = argparse.ArgumentParser()
 parser.add_argument('data_path', type=str)
 parser.add_argument('frame_length', type=int)
-parser.add_argument('max_length', type=int)
 args = parser.parse_args()
 
 
