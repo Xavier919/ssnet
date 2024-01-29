@@ -20,8 +20,7 @@ if __name__ == "__main__":
     mus_test = musdb.DB(subsets="test")
 
     FRAME_LENGTH = args.frame_length
-    MAX_AUDIO_LENGTH = args.max_audio_length
 
-    X_train, y_train = process_audio(mus_train, tag='train', frame_length=FRAME_LENGTH, max_audio_length=MAX_AUDIO_LENGTH)
-    X_valid, y_valid = process_audio(mus_valid, tag='valid', frame_length=FRAME_LENGTH, max_audio_length=MAX_AUDIO_LENGTH)
-    X_test, y_test = process_audio(mus_test, tag='test', frame_length=FRAME_LENGTH, max_audio_length=MAX_AUDIO_LENGTH)
+    X_train, y_train = process_audio(mus_train, tag='train', frame_length=FRAME_LENGTH)
+    X_valid, y_valid = process_audio(mus_valid, tag='valid', frame_length=FRAME_LENGTH)
+    X_test, y_test = process_audio(mus_test, tag='test', frame_length=FRAME_LENGTH)

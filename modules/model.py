@@ -23,7 +23,7 @@ class ssnet(nn.Module):
         self.dconv3 = self.conv_block(256, 128, k=k)
         self.dconv2 = self.conv_block(128, 64, k=k)
         self.dconv1 = self.conv_block(64, 32, k=k)
-        self.dconvf = self.final_block(32, 2, k=k)
+        self.dconvf = self.final_block(32, 8, k=k)
         #decoder upsampling operations
         self.upsample4 = nn.ConvTranspose1d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
         self.upsample3 = nn.ConvTranspose1d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
@@ -86,6 +86,9 @@ class ssnet(nn.Module):
 
         #decoder layer f (final layer)
         x = self.dconvf(x)
+
+        batch_size, channels, time_samples = x.shape
+        x = x.view(batch_size, 4, 2, time_samples)
         return x
 
     @staticmethod

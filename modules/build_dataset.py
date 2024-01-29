@@ -1,9 +1,10 @@
 import torch
 import pickle
+import numpy as np
 from utils import transform
 
 
-def process_audio(mus, tag, frame_length=30000, max_audio_length=100000000):
+def process_audio(mus, tag, frame_length=30000):
     """
     Processes an audio dataset to extract frames of audio and corresponding targets.
 
@@ -18,19 +19,21 @@ def process_audio(mus, tag, frame_length=30000, max_audio_length=100000000):
     # Iterate through each track in the dataset
     for track in mus:
         # Get the mixture audio and the target stem
-        mixture_audio = track.stems[0]
-        target_stem = track.stems[4]
+        mixture_audio = track.stems[0].T
 
-        # Skip processing if audio is too long
-        if mixture_audio.shape[0] > max_audio_length:
-            continue
+        t1 = track.stems[1].T
+        t2 = track.stems[2].T
+        t3 = track.stems[3].T
+        t4 = track.stems[4].T
+        target = np.concatenate(t1,t2,t3,t4)
+
 
         # Iterate over the audio in chunks of 'frame_length'
         for start_idx in range(0, mixture_audio.shape[0] - frame_length + 1, frame_length):
             # Extract the frames for mixture and target
 
             mixture_frame = transform(mixture_audio[start_idx:start_idx+frame_length])
-            target_frame = transform(target_stem[start_idx:start_idx+frame_length])
+            target_frame = transform(target[:,:,start_idx:start_idx+frame_length])
 
             # Append the frames as a tuple to the dataset list
             samples.append(mixture_frame)

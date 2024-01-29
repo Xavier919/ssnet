@@ -13,7 +13,7 @@ import pickle
 from torchmetrics.audio import SignalNoiseRatio, ScaleInvariantSignalNoiseRatio
 from model import ssnet
 from sampler import Samples
-from utils import utility_fct
+from utils import utility_fct, crop
 from torch.nn import MSELoss
 
 
@@ -62,16 +62,14 @@ if __name__ == "__main__":
 
 
     start_time = time.time()
-
     best_model = 1.0
     for epoch in range(args.epochs):
         ssnet_.train()
         train_losses = []
         for X, y in train_loader:
-            size = len(X)
-            X = X.view(size,2,-1).cuda()
-            y = y.view(size,2,-1).cuda()
-            out = ssnet_(X)
+            X = X.cuda()
+            y = y.cuda()
+            out = ssnet_(X)[:,:,:,100:-100]
             ssnet_.zero_grad()
             loss = loss_function(out, y)
             writer.add_scalar("Loss/train", loss, epoch)
@@ -83,10 +81,9 @@ if __name__ == "__main__":
         ssnet_.eval()
         valid_losses = []
         for X, y in valid_loader:
-            size = len(X)
-            X = X.view(size,2,-1).cuda()
-            y = y.view(size,2,-1).cuda()
-            out = ssnet_(X)
+            X = X.cuda()
+            y = y.cuda()
+            out = ssnet_(X)[:,:,:,100:-100]
             loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss.cpu().detach().numpy())
