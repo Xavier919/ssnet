@@ -4,7 +4,7 @@ import numpy as np
 from utils import transform
 
 
-def process_audio(mus, tag, frame_length=30000, max_length=10000000):
+def process_audio(mus, tag, frame_length=50000):
     """
     Processes an audio dataset to extract frames of audio and corresponding targets.
 
@@ -26,9 +26,6 @@ def process_audio(mus, tag, frame_length=30000, max_length=10000000):
         t3 = track.stems[3].T
         t4 = track.stems[4].T
         target = np.stack([t1,t2,t3,t4])
-
-        if mixture_audio.shape[0] > max_length:
-            continue
 
         # Iterate over the audio in chunks of 'frame_length'
         for start_idx in range(0, mixture_audio.shape[1] - frame_length + 1, frame_length):
