@@ -1,7 +1,7 @@
 import torch
 import pickle
 import numpy as np
-from utils import transform
+from modules.utils import transform
 
 
 def process_audio(mus, tag, frame_length=30000, max_length=10000000):
