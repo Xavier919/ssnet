@@ -67,6 +67,10 @@ if __name__ == "__main__":
         ssnet_.train()
         train_losses = []
         for X, y in train_loader:
+            print(len(X))
+            print(X.shape)
+            print(len(y))
+            print(y)
             X = X.cuda()
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
