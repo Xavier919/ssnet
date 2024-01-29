@@ -45,4 +45,4 @@ if __name__ == "__main__":
         for frag in zip(out,y):
             results.append(frag)
 
-    #pickle.dump(results, open('results.pkl', 'wb'))
+    pickle.dump(results, open('results.pkl', 'wb'))
