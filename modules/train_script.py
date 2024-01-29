@@ -69,6 +69,8 @@ if __name__ == "__main__":
         for X, y in train_loader:
             X = X.cuda()
             y = y.cuda()
+            print(X.shape)
+            print(y.shape)
             out = ssnet_(X)[:,:,:,100:-100]
             ssnet_.zero_grad()
             loss = loss_function(out, y)
