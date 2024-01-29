@@ -46,7 +46,7 @@ if __name__ == "__main__":
         out = out.cpu().detach().numpy()
         for out_i, y_i in (out,y):
             out_s1, y_s1 = out_i[:,0,:,:], y_i[:,0,:,:]
-            out_s2, y_s2 = out_i[:,1,1,:,:], y_i[:,1,:,:]
+            out_s2, y_s2 = out_i[:,1,:,:], y_i[:,1,:,:]
             out_s3, y_s3 = out_i[:,2,:,:], y_i[:,2,:,:]
             out_s4, y_s4 = out_i[:,3,:,:], y_i[:,3,:,:]
             snr1 = snr(out_s1, y_s1)
