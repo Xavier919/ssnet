@@ -8,7 +8,7 @@ import pickle
 from torchmetrics.audio import SignalNoiseRatio, ScaleInvariantSignalNoiseRatio
 from model import ssnet
 from sampler import Samples
-from utils import utility_fct, crop
+from utils import utility_fct
 
 parser = argparse.ArgumentParser()
 parser.add_argument('data_path', type=str)
@@ -39,11 +39,9 @@ if __name__ == "__main__":
     results = []
     ssnet_.eval()
     for X, y in test_loader:
-        size = len(X)
-        X = X.view(size,2,-1).cuda()
-        y = y.view(size,2,-1).cuda()
-        out = ssnet_(X)
-        out, y = crop(out.cpu().detach().numpy(), 100), crop(y.cpu().detach().numpy(), 100)
+        X = X.cuda()
+        y = y.cuda()
+        out = ssnet_(X)[:,:,:,100:-100]
         for frag in zip(out,y):
             results.append(frag)
 
