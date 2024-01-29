@@ -13,7 +13,7 @@ import pickle
 from torchmetrics.audio import SignalNoiseRatio, ScaleInvariantSignalNoiseRatio
 from model import ssnet
 from sampler import Samples
-from utils import utility_fct, crop
+from utils import utility_fct
 from torch.nn import MSELoss
 
 
@@ -54,8 +54,8 @@ if __name__ == "__main__":
     train_set = Samples(X_train, y_train)
     valid_set = Samples(X_valid, y_valid)
 
-    train_loader = DataLoader(train_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
-    valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
+    train_loader = DataLoader(train_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
+    valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     loss_function = MSELoss(reduction='mean').to(device)
@@ -71,8 +71,6 @@ if __name__ == "__main__":
             X = X.view(size,2,-1).cuda()
             y = y.view(size,4,2,-1).cuda()
             out = ssnet_(X)[:,:,:,100:-100]
-            print(X.cpu().detach().numpy().shape)
-            print(y.cpu().detach().numpy().shape)
             ssnet_.zero_grad()
             loss = loss_function(out, y)
             writer.add_scalar("Loss/train", loss, epoch)
