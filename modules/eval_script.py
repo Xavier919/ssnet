@@ -40,8 +40,8 @@ if __name__ == "__main__":
     ssnet_.eval()
     for X, y in test_loader:
         X = X.cuda()
-        y = y.cuda()
         out = ssnet_(X)[:,:,:,100:-100]
+        out = out.cpu().detach().numpy()
         for frag in zip(out,y):
             results.append(frag)
 
