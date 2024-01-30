@@ -12,30 +12,5 @@ def utility_fct(Xy):
     y = torch.stack(y, dim=0)
     return (X, y)
 
-#def transform(x):
-#    return torch.tensor(x).float()
-import librosa
-import numpy as np
-
-def transform(x, sr=22050, n_mels=128):
-    """
-    Transforms an audio signal into a normalized Mel-spectrogram.
-
-    :param x: Input audio signal (numpy array).
-    :param sr: Sample rate of the audio signal.
-    :param n_mels: Number of Mel bands to generate.
-    :return: Transformed audio as a Mel-spectrogram.
-    """
-    # Normalize the audio to have zero mean and unit variance
-    x_normalized = librosa.util.normalize(x)
-
-    # Convert to Mel-spectrogram
-    mel_spec = librosa.feature.melspectrogram(x_normalized, sr=sr, n_mels=n_mels)
-
-    # Convert to decibels
-    mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
-
-    # Convert to PyTorch tensor
-    mel_tensor = torch.tensor(mel_spec_db).float()
-
-    return mel_tensor
+def transform(x):
+    return torch.tensor(x).float()
