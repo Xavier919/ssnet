@@ -42,7 +42,7 @@ if __name__ == "__main__":
     ssnet_.eval()
     for X, y in test_loader:
         X = X.cuda()
-        out = ssnet_(X)[:,:,:,100:-100].cpu().detach().numpy()
+        out = ssnet_(X)[:,:,:,100:-100].cpu().detach()
         for out_i, y_i in zip(out,y):
             out_s1, y_s1 = out_i[0,:,:], y_i[0,:,:]
             out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:]
