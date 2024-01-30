@@ -10,7 +10,6 @@ def process_audio(mus, tag, frame_length=50000):
 
     :param mus: A musdb dataset object to process.
     :param frame_length: Length of each audio frame to process.
-    :param max_audio_length: Maximum allowed length of audio to process.
     :return: full audio mixture and target source 
     """
     samples = []
