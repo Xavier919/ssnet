@@ -44,7 +44,7 @@ if __name__ == "__main__":
         X = X.cuda()
         out = ssnet_(X)[:,:,:,100:-100]
         out = out.cpu().detach().numpy()
-        for out_i, y_i in (out,y):
+        for out_i, y_i in zip(out,y):
             out_s1, y_s1 = out_i[:,0,:,:], y_i[:,0,:,:]
             out_s2, y_s2 = out_i[:,1,:,:], y_i[:,1,:,:]
             out_s3, y_s3 = out_i[:,2,:,:], y_i[:,2,:,:]
