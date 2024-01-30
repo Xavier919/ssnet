@@ -58,16 +58,3 @@ if __name__ == "__main__":
     print(f'SNR for source 2 (bass): {np.mean([x[1] for x in results])}')
     print(f'SNR for source 3 (rest of accompaniment): {np.mean([x[2] for x in results])}')
     print(f'SNR for source 4 (vocals): {np.mean([x[3] for x in results])}')
-
-
-    track = []
-    for i in mus_test:
-        mixture_audio = i.stems[0].T    
-        for start_idx in tqdm(range(0, mixture_audio.shape[1] - frame_length + 1, frame_length)):
-            # Extract the frames for mixture and target
-            X = transform(mixture_audio[:, start_idx:start_idx+frame_length])
-            pad = torch.zeros(2, 100)
-            X = torch.cat([pad, X, pad], dim=1).view(1,2,-1)
-            out = ssnet(X)[:,:,:,100:-100]
-            track.append(out)
-        break
