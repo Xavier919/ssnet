@@ -42,7 +42,7 @@ if __name__ == "__main__":
     ssnet_.eval()
     for X, y in test_loader:
         X = X.cuda()
-        out = ssnet_(X)[:,:,:,100:-100]
+        out = ssnet_(X)[:,:,:,100:-100].cpu().detach().numpy()
         for out_i, y_i in zip(out,y):
             out_s1, y_s1 = out_i[0,:,:], y_i[0,:,:]
             out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:]
@@ -52,7 +52,7 @@ if __name__ == "__main__":
             snr2 = snr(out_s2, y_s2)
             snr3 = snr(out_s3, y_s3)
             snr4 = snr(out_s4, y_s4)
-            results.append((snr1.cpu().detach().numpy(),snr2.cpu().detach().numpy(),snr3.cpu().detach().numpy(),snr4.cpu().detach().numpy()))
+            results.append((snr1,snr2,snr3,snr4))
     print(f'SNR for source 1 (drums): {[np.mean(x[0]) for x in results]}')
     print(f'SNR for source 2 (bass): {[np.mean(x[1]) for x in results]}')
     print(f'SNR for source 3 (rest of accompaniment): {[np.mean(x[2]) for x in results]}')
