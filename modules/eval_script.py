@@ -53,6 +53,7 @@ if __name__ == "__main__":
             snr3 = snr(out_s3, y_s3)
             snr4 = snr(out_s4, y_s4)
             results.append((snr1,snr2,snr3,snr4))
+            
     print(f'SNR for source 1 (drums): {[np.mean(x[0]) for x in results]}')
     print(f'SNR for source 2 (bass): {[np.mean(x[1]) for x in results]}')
     print(f'SNR for source 3 (rest of accompaniment): {[np.mean(x[2]) for x in results]}')

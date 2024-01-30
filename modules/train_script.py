@@ -10,7 +10,6 @@ import torch.nn as nn
 import argparse
 import time
 import pickle
-from torchmetrics.audio import SignalNoiseRatio, ScaleInvariantSignalNoiseRatio
 from model import ssnet
 from sampler import Samples
 from utils import utility_fct

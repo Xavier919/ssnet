@@ -1,5 +1,6 @@
 import torch
 
+#add padding on both sides of samples
 def pad_seqs(seqs, num_chan, num_pad=100):
     pad = torch.zeros(num_chan, num_pad)
     pad_seqs = [torch.cat([pad, x, pad], dim=1) for x in seqs]

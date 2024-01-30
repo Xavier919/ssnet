@@ -16,11 +16,9 @@ def process_audio(mus, tag, frame_length=50000):
     samples = []
     targets = []
 
-    # Iterate through each track in the dataset
     for track in mus:
         # Get the mixture audio and the target stem
         mixture_audio = track.stems[0].T
-
         t1 = track.stems[1].T
         t2 = track.stems[2].T
         t3 = track.stems[3].T
@@ -30,11 +28,9 @@ def process_audio(mus, tag, frame_length=50000):
         # Iterate over the audio in chunks of 'frame_length'
         for start_idx in range(0, mixture_audio.shape[1] - frame_length + 1, frame_length):
             # Extract the frames for mixture and target
-
             mixture_frame = transform(mixture_audio[:, start_idx:start_idx+frame_length])
             target_frame = transform(target[:,:,start_idx:start_idx+frame_length])
 
-            # Append the frames as a tuple to the dataset list
             samples.append(mixture_frame)
             targets.append(target_frame)
     
