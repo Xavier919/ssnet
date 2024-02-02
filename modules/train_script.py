@@ -58,9 +58,12 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    #MSELoss_ = MSELoss(reduction='mean').to(device)
+    MSELoss_ = MSELoss()
     
-    loss_function = PermutationInvariantTraining(scale_invariant_signal_noise_ratio, mode="permutation-wise", eval_func="max").to(device)
+    #loss_function = PermutationInvariantTraining(scale_invariant_signal_noise_ratio, mode="permutation-wise", eval_func="max").to(device)
+    
+    loss_function = PermutationInvariantTraining(MSELoss_, mode="permutation-wise", eval_func="max").to(device)
+
 
     start_time = time.time()
     best_model = 1.0
