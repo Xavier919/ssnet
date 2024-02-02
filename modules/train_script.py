@@ -60,7 +60,7 @@ if __name__ == "__main__":
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     #MSELoss_ = MSELoss(reduction='mean').to(device)
     
-    loss_function = PermutationInvariantTraining(scale_invariant_signal_noise_ratio, mode="speaker-wise", eval_func="max").to(device)
+    loss_function = PermutationInvariantTraining(scale_invariant_signal_noise_ratio, mode="permutation-wise", eval_func="max").to(device)
 
     start_time = time.time()
     best_model = 1.0
@@ -74,7 +74,7 @@ if __name__ == "__main__":
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
             ssnet_.zero_grad()
-            loss = loss_function(out.view(size,8,-1), y.view(size,8,-1))
+            loss = loss_function(out, y)
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             optimizer.step()
@@ -88,7 +88,7 @@ if __name__ == "__main__":
             X = X.cuda()
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
-            loss = loss_function(out.view(size,8,-1), y.view(size,8,-1))
+            loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss.cpu().detach().numpy())
         print(f'{epoch}_{np.mean(valid_losses)}')
