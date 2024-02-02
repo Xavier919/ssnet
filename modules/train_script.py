@@ -62,7 +62,7 @@ if __name__ == "__main__":
     
     #loss_function = PermutationInvariantTraining(scale_invariant_signal_noise_ratio, mode="permutation-wise", eval_func="max").to(device)
     
-    loss_function = PermutationInvariantTraining(MSELoss_, mode="permutation-wise", eval_func="max").to(device)
+    loss_function = PermutationInvariantTraining(MSELoss_, mode="speaker-wise", eval_func="max").to(device)
 
 
     start_time = time.time()
