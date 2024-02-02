@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     #loss_function = MSELoss(reduction='mean').to(device)
-    pit = PermutationInvariantTraining(signal_distortion_ratio, mode="permutation-wise", eval_func="max")
+    pit = PermutationInvariantTraining(signal_distortion_ratio, mode="permutation-wise", eval_func="max").to(device)
 
     start_time = time.time()
     best_model = 1.0
