@@ -5,7 +5,7 @@ import numpy as np
 import torch.nn as nn
 import argparse
 import pickle
-from torchmetrics.audio import SignalNoiseRatio, ScaleInvariantSignalNoiseRatio
+from torchmetrics.audio import SignalDistortionRatio
 from model import ssnet
 from sampler import Samples
 from utils import utility_fct
@@ -16,7 +16,7 @@ parser.add_argument('batch_size', type=int)
 parser.add_argument('model', type=str)
 args = parser.parse_args()
 
-snr = SignalNoiseRatio()
+sdr = SignalDistortionRatio()
 
 if __name__ == "__main__":
 
@@ -48,13 +48,13 @@ if __name__ == "__main__":
             out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:]
             out_s3, y_s3 = out_i[2,:,:], y_i[2,:,:]
             out_s4, y_s4 = out_i[3,:,:], y_i[3,:,:]
-            snr1 = snr(out_s1, y_s1)
-            snr2 = snr(out_s2, y_s2)
-            snr3 = snr(out_s3, y_s3)
-            snr4 = snr(out_s4, y_s4)
-            results.append((snr1,snr2,snr3,snr4))
+            sdr1 = sdr(out_s1, y_s1)
+            sdr2 = sdr(out_s2, y_s2)
+            sdr3 = sdr(out_s3, y_s3)
+            sdr4 = sdr(out_s4, y_s4)
+            results.append((sdr1,sdr2,sdr3,sdr4))
             
-    print(f'SNR for source 1 (drums): {np.mean([x[0] for x in results])}')
-    print(f'SNR for source 2 (bass): {np.mean([x[1] for x in results])}')
-    print(f'SNR for source 3 (rest of accompaniment): {np.mean([x[2] for x in results])}')
-    print(f'SNR for source 4 (vocals): {np.mean([x[3] for x in results])}')
+    print(f'SDR for source 1 (drums): {np.mean([x[0] for x in results])}')
+    print(f'SDR for source 2 (bass): {np.mean([x[1] for x in results])}')
+    print(f'SDR for source 3 (rest of accompaniment): {np.mean([x[2] for x in results])}')
+    print(f'SDR for source 4 (vocals): {np.mean([x[3] for x in results])}')

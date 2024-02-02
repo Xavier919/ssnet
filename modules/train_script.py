@@ -38,7 +38,6 @@ if __name__ == "__main__":
     X_train, y_train = train
     X_valid, y_valid = valid
 
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if device.type == 'cuda':
         print(f"Using GPU: {torch.cuda.get_device_name(0)}")
@@ -59,9 +58,9 @@ if __name__ == "__main__":
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     loss_function = MSELoss(reduction='mean').to(device)
 
-
     start_time = time.time()
     best_model = 1.0
+    
     for epoch in range(args.epochs):
         ssnet_.train()
         train_losses = []

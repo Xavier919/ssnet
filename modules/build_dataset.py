@@ -16,8 +16,8 @@ def process_audio(mus, tag, frame_length=30000):
 
     for track in tqdm(mus):
         # Get the mixture audio and the target stem
-        mixture_audio = track.stems[0].T
-        target = np.stack([track.stems[i].T for i in range(1, 5)])
+        mixture_audio = track.stems[0].T # shape (2, L)
+        target = np.stack([track.stems[i].T for i in range(1, 5)]) # shape (4, 2, L)
 
         # Iterate over the audio in chunks of 'frame_length'
         for start_idx in range(0, mixture_audio.shape[1] - frame_length + 1, frame_length):
