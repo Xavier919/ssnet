@@ -6,7 +6,7 @@ import torch.optim as optim
 from torch import nn
 from torch.utils.tensorboard import SummaryWriter
 from torchmetrics.audio import PermutationInvariantTraining
-from torchmetrics.functional.audio import signal_distortion_ratio
+from torchmetrics.functional.audio import scale_invariant_signal_noise_ratio
 import numpy as np
 import torch.nn as nn
 import argparse
@@ -58,8 +58,9 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    MSELoss_ = MSELoss(reduction='mean')
-    loss_function = PermutationInvariantTraining(MSELoss_, mode="permutation-wise", eval_func="max").to(device)
+    #MSELoss_ = MSELoss(reduction='mean').to(device)
+    
+    loss_function = PermutationInvariantTraining(scale_invariant_signal_noise_ratio, mode="speaker-wise", eval_func="max").to(device)
 
     start_time = time.time()
     best_model = 1.0
@@ -68,11 +69,12 @@ if __name__ == "__main__":
         ssnet_.train()
         train_losses = []
         for X, y in train_loader:
+            size = len(X)
             X = X.cuda()
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
             ssnet_.zero_grad()
-            loss = loss_function(out, y)
+            loss = loss_function(out.view(size,8,-1), y.view(size,8,-1))
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             optimizer.step()
@@ -82,10 +84,11 @@ if __name__ == "__main__":
         ssnet_.eval()
         valid_losses = []
         for X, y in valid_loader:
+            size = len(X)
             X = X.cuda()
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
-            loss = loss_function(out, y)
+            loss = loss_function(out.view(size,8,-1), y.view(size,8,-1))
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss.cpu().detach().numpy())
         print(f'{epoch}_{np.mean(valid_losses)}')
