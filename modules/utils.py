@@ -18,6 +18,4 @@ def transform(x):
     x = fft(x)
     x = np.abs(x)
     x = np.log(x + 1e-9)
-
-
     return torch.tensor(x).float()
