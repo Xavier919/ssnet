@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader
 import torch.optim as optim
 from torch import nn
 from torch.utils.tensorboard import SummaryWriter
+from torchmetrics.audio import PermutationInvariantTraining
+from torchmetrics.functional.audio import signal_distortion_ratio
 import numpy as np
 import torch.nn as nn
 import argparse
@@ -56,7 +58,8 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    loss_function = MSELoss(reduction='mean').to(device)
+    #loss_function = MSELoss(reduction='mean').to(device)
+    pit = PermutationInvariantTraining(signal_distortion_ratio, mode="permutation-wise", eval_func="max")
 
     start_time = time.time()
     best_model = 1.0
