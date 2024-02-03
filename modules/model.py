@@ -30,6 +30,7 @@ class ssnet(nn.Module):
         self.upsample2 = nn.ConvTranspose1d(in_channels=128, out_channels=64, kernel_size=2, stride=2)
         self.upsample1 = nn.ConvTranspose1d(in_channels=64, out_channels=32, kernel_size=2, stride=2)
 
+
     def crop(self, x, enc_ftrs):
         chs, dims = x.shape[1:]
         enc_ftrs = torchvision.transforms.CenterCrop([chs, dims])(enc_ftrs)
@@ -101,13 +102,13 @@ class ssnet(nn.Module):
         return x
 
     @staticmethod
-    def conv_block(in_channels, out_channels, k=10, s=4):
+    def conv_block(in_channels, out_channels, k=10, s=2):
         block = nn.Sequential(
-            nn.Conv1d(in_channels, in_channels, kernel_size=k, stride=s, groups=in_channels, padding='same'),
-            nn.Conv1d(in_channels, out_channels, kernel_size=1, padding='same'),
+            nn.Conv1d(in_channels, in_channels, kernel_size=k, stride=s, groups=in_channels),
+            nn.Conv1d(in_channels, out_channels, kernel_size=1),
             nn.ReLU(),
-            nn.Conv1d(out_channels, out_channels, kernel_size=k, stride=s, groups=out_channels, padding='same'),
-            nn.Conv1d(out_channels, out_channels, kernel_size=1, padding='same'),
+            nn.Conv1d(out_channels, out_channels, kernel_size=k, stride=s, groups=out_channels),
+            nn.Conv1d(out_channels, out_channels, kernel_size=1),
             nn.ReLU(),
         )
         return block
@@ -115,7 +116,7 @@ class ssnet(nn.Module):
     @staticmethod
     def final_block(in_channels, out_channels, k=1):
         block = nn.Sequential(
-            nn.Conv1d(in_channels, out_channels, kernel_size=k, padding='same'),
+            nn.Conv1d(in_channels, out_channels, kernel_size=k),
             nn.ReLU(),
         )
         return block
