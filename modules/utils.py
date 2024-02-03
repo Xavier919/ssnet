@@ -14,5 +14,7 @@ def utility_fct(Xy):
     y = torch.stack(y, dim=0)
     return (X, y)
 
+
+
 def transform(x):
     return torch.tensor(x).float()

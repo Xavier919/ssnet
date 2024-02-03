@@ -101,16 +101,14 @@ class ssnet(nn.Module):
         return x
 
     @staticmethod
-    def conv_block(in_channels, out_channels, k=5):
+    def conv_block(in_channels, out_channels, k=10, s=4):
         block = nn.Sequential(
-            nn.Conv1d(in_channels, in_channels, kernel_size=k, groups=in_channels, padding='same'),
+            nn.Conv1d(in_channels, in_channels, kernel_size=k, stride=s, groups=in_channels, padding='same'),
             nn.Conv1d(in_channels, out_channels, kernel_size=1, padding='same'),
-            nn.Tanh(),
-            #nn.BatchNorm1d(out_channels),
-            nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
+            nn.ReLU(),
+            nn.Conv1d(out_channels, out_channels, kernel_size=k, stride=s, groups=out_channels, padding='same'),
             nn.Conv1d(out_channels, out_channels, kernel_size=1, padding='same'),
-            nn.Tanh(),
-            #nn.BatchNorm1d(out_channels),
+            nn.ReLU(),
         )
         return block
 
@@ -118,7 +116,6 @@ class ssnet(nn.Module):
     def final_block(in_channels, out_channels, k=1):
         block = nn.Sequential(
             nn.Conv1d(in_channels, out_channels, kernel_size=k, padding='same'),
-            nn.Tanh(),
-            #nn.BatchNorm1d(out_channels),
+            nn.ReLU(),
         )
         return block
