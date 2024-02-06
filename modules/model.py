@@ -70,7 +70,7 @@ class ssnet(nn.Module):
 
         #encoder layer 6
         block6 = self.conv6(x) 
-        x = self.maxpool(block6)
+        x = block6
         #x = self.dropout(x)
 
         #encoder bottleneck layer
