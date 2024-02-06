@@ -28,6 +28,7 @@ parser.add_argument('batch_size', type=int)
 parser.add_argument('epochs', type=int)
 parser.add_argument('lr', type=float)
 parser.add_argument('l2', type=float)
+parser.add_argument('dropout', type=float)
 parser.add_argument('kernel', type=int)
 parser.add_argument('tag', type=str)
 args = parser.parse_args()
@@ -47,7 +48,7 @@ if __name__ == "__main__":
     else:
         print("Using CPU")
 
-    ssnet_ = ssnet(k=args.kernel).to(device)
+    ssnet_ = ssnet(k=args.kernel, p=args.dropout).to(device)
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
         ssnet_ = nn.DataParallel(ssnet_) 
