@@ -15,4 +15,5 @@ def utility_fct(Xy):
     return (X, y)
 
 def transform(x):
+    x = fft(x)
     return torch.tensor(x).float()
