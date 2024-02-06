@@ -19,7 +19,7 @@ def transform(x):
     return torch.tensor(x).float()
 
 def transform(x):
-    x_fft = torch.fft.fft(x)
-    magnitude = torch.abs(x_fft)
-    log_magnitude = torch.log(magnitude + 1e-6)  # Adding a small constant to avoid log(0)
-    return log_magnitude.float()
+    x_fft = fft(x)
+    magnitude = np.abs(x_fft)
+    log_magnitude = np.log(magnitude + 1e-6)
+    return torch.tensor(log_magnitude).float()
