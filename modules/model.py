@@ -116,10 +116,10 @@ class ssnet(nn.Module):
         block = nn.Sequential(
             nn.Conv1d(in_channels, in_channels, kernel_size=k, groups=in_channels, padding='same'),
             nn.Conv1d(in_channels, out_channels, kernel_size=1),
-            nn.PReLU(),
+            nn.GELU(),
             nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
             nn.Conv1d(out_channels, out_channels, kernel_size=1),
-            nn.PReLU(),
+            nn.GELU(),
         )
         return block
 
@@ -127,6 +127,6 @@ class ssnet(nn.Module):
     def final_block(in_channels, out_channels, k=1):
         block = nn.Sequential(
             nn.Conv1d(in_channels, out_channels, kernel_size=k),
-            nn.PReLU(),
+            nn.GELU(),
         )
         return block
