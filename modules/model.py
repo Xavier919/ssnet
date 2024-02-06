@@ -34,7 +34,7 @@ class ssnet(nn.Module):
         self.upsample1 = nn.ConvTranspose1d(in_channels=64, out_channels=32, kernel_size=2, stride=2)
 
         # Initialize weights
-        #self.apply(self.init_weights)
+        self.apply(self.init_weights)
 
 
     def crop(self, x, enc_ftrs):
@@ -120,12 +120,12 @@ class ssnet(nn.Module):
         x = x.view(batch_size, 4, 2, time_samples)
         return x
 
-    #@staticmethod
-    #def init_weights(m):
-    #    if isinstance(m, nn.Conv1d) or isinstance(m, nn.ConvTranspose1d):
-    #        nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-    #        if m.bias is not None:
-    #            nn.init.constant_(m.bias, 0)
+    @staticmethod
+    def init_weights(m):
+        if isinstance(m, nn.Conv1d) or isinstance(m, nn.ConvTranspose1d):
+            nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
 
     @staticmethod
     def conv_block(in_channels, out_channels, k=5):
