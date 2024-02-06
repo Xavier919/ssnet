@@ -14,12 +14,12 @@ if __name__ == "__main__":
     # Set the MUSDB_PATH environment variable
     os.environ['MUSDB_PATH'] = args.data_path
     # Initialize the musdb datasets
-    mus_train = musdb.DB(subsets="train", split='train')
-    mus_valid = musdb.DB(subsets="train", split='valid')
+    #mus_train = musdb.DB(subsets="train", split='train')
+    #mus_valid = musdb.DB(subsets="train", split='valid')
     mus_test = musdb.DB(subsets="test")
 
     FRAME_LENGTH = args.frame_length
 
-    X_train, y_train = process_audio(mus_train, tag='train', frame_length=FRAME_LENGTH)
-    X_valid, y_valid = process_audio(mus_valid, tag='valid', frame_length=FRAME_LENGTH)
+    #X_train, y_train = process_audio(mus_train, tag='train', frame_length=FRAME_LENGTH)
+    #X_valid, y_valid = process_audio(mus_valid, tag='valid', frame_length=FRAME_LENGTH)
     X_test, y_test = process_audio(mus_test, tag='test', frame_length=FRAME_LENGTH)

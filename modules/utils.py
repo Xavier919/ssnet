@@ -23,4 +23,3 @@ def transform(x):
     magnitude = torch.abs(x_fft_tensor)
     log_magnitude = torch.log1p(magnitude)
     return log_magnitude.float()
-
