@@ -17,7 +17,7 @@ class ssnet(nn.Module):
         self.conv3 = self.conv_block(64, 128, k=k)
         self.conv4 = self.conv_block(128, 256, k=k)
         self.conv5 = self.conv_block(256, 512, k=k)
-        self.conv5 = self.conv_block(512, 1024, k=k)
+        self.conv6 = self.conv_block(512, 1024, k=k)
         self.convb = self.conv_block(1024, 1024, k=k)
         # Decoder convolutional blocks
         self.dconv5 = self.conv_block(1024, 512, k=k)
