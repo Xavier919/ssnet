@@ -60,11 +60,13 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    loss_function = MSELoss().to(device)
+    MSELoss = MSELoss(reduction='mean')
+    loss_function = PermutationInvariantTraining(MSELoss,mode="speaker-wise", eval_func="max").to(device)
 
     print(f'tag:{args.tag}\n')
     print(f'learning rate:{args.lr}\n')
     print(f'weight decay:{args.l2}\n')
+    print(f'dropout:{args.dropout}\n')
     print(f'batch size:{args.batch_size}\n')
     print(f'kernel:{args.kernel}\n')
 
