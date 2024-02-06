@@ -47,7 +47,7 @@ if __name__ == "__main__":
     else:
         print("Using CPU")
 
-    ssnet_ = ssnet(k=args.kernel, s=args.stride).to(device)
+    ssnet_ = ssnet(k=args.kernel).to(device)
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
         ssnet_ = nn.DataParallel(ssnet_) 
