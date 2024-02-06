@@ -23,3 +23,15 @@ def transform(x):
     magnitude = np.abs(x_fft)
     log_magnitude = np.log(magnitude + 1e-6)
     return torch.tensor(log_magnitude).float()
+
+def transform(x):
+    x_fft = fft(x)
+    
+    x_fft_tensor = torch.tensor(x_fft, dtype=torch.complex64)
+    
+    magnitude = torch.abs(x_fft_tensor)
+    
+    log_magnitude = torch.log1p(magnitude)
+    
+    return log_magnitude.float()
+
