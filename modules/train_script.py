@@ -60,7 +60,13 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     loss_function = MSELoss().to(device)
-    
+
+    print(f'tag:{args.tag}\n')
+    print(f'learning rate:{args.lr}\n')
+    print(f'weight decay:{args.l2}\n')
+    print(f'batch size:{args.batch_size}\n')
+    print(f'kernel:{args.kernel}\n')
+
     start_time = time.time()
     best_model = 1.0
     
