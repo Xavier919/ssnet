@@ -33,9 +33,6 @@ class ssnet(nn.Module):
         self.upsample2 = nn.ConvTranspose1d(in_channels=128, out_channels=64, kernel_size=2, stride=2)
         self.upsample1 = nn.ConvTranspose1d(in_channels=64, out_channels=32, kernel_size=2, stride=2)
 
-        # Initialize weights
-        #self.apply(self.init_weights)
-
 
     def crop(self, x, enc_ftrs):
         chs, dims = x.shape[1:]
@@ -120,28 +117,21 @@ class ssnet(nn.Module):
         x = x.view(batch_size, 4, 2, time_samples)
         return x
 
-    #@staticmethod
-    #def init_weights(m):
-    #    if isinstance(m, nn.Conv1d) or isinstance(m, nn.ConvTranspose1d):
-    #        nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-    #        if m.bias is not None:
-    #            nn.init.constant_(m.bias, 0)
-
     @staticmethod
     def conv_block(in_channels, out_channels, k=5):
         block = nn.Sequential(
             nn.Conv1d(in_channels, in_channels, kernel_size=k, groups=in_channels, padding='same'),
             nn.Conv1d(in_channels, out_channels, kernel_size=1),
             nn.GELU(),
-            nn.BatchNorm1d(out_channels),
+            #nn.BatchNorm1d(out_channels),
             nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
             nn.Conv1d(out_channels, out_channels, kernel_size=1),
             nn.GELU(),
-            nn.BatchNorm1d(out_channels),
+            #nn.BatchNorm1d(out_channels),
             nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
             nn.Conv1d(out_channels, out_channels, kernel_size=1, padding='same'),
             nn.GELU(),
-            nn.BatchNorm1d(out_channels),
+            #nn.BatchNorm1d(out_channels),
         )
         return block
 
@@ -153,3 +143,6 @@ class ssnet(nn.Module):
             nn.BatchNorm1d(out_channels),
         )
         return block
+    
+
+#next try not batchnorm, and reg conv
