@@ -25,14 +25,15 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    ssnet_ = ssnet().to(device)
-    
+    checkpoint = torch.load(args.model, map_location=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
+
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
-        ssnet_ = nn.DataParallel(ssnet_)
-    checkpoint = torch.load(args.model)
-    state_dict = {key.replace("module.", ""): value for key, value in checkpoint.items()}
-    ssnet_.load_state_dict(state_dict)
+        ssnet_ = nn.DataParallel(checkpoint)
+        ssnet_.load_state_dict(checkpoint)
+    else:
+        state_dict = {key.replace("module.", ""): value for key, value in checkpoint.items()}
+        checkpoint.load_state_dict(state_dict)
     
     test_set = Samples(X_test, y_test)
 
