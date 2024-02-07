@@ -13,6 +13,7 @@ from utils import utility_fct
 parser = argparse.ArgumentParser()
 parser.add_argument('data_path', type=str)
 parser.add_argument('batch_size', type=int)
+parser.add_argument('kernel', type=int)
 parser.add_argument('model', type=str)
 args = parser.parse_args()
 
@@ -24,7 +25,7 @@ if __name__ == "__main__":
     X_test, y_test = test
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = ssnet().to(device)
+    model = ssnet(k=args.kernel).to(device)
     checkpoint = torch.load(args.model, map_location=device)
 
     if torch.cuda.device_count() > 1:
