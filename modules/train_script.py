@@ -54,8 +54,8 @@ if __name__ == "__main__":
     train_set = Samples(X_train, y_train)
     valid_set = Samples(X_valid, y_valid)
 
-    train_loader = DataLoader(train_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=16, shuffle=True)
-    valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=16, shuffle=True)
+    train_loader = DataLoader(train_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
+    valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     loss_function = MSELoss(reduction='mean')
