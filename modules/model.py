@@ -140,7 +140,7 @@ class ssnet(nn.Module):
         block = nn.Sequential(
             nn.Conv1d(in_channels, out_channels, kernel_size=k),
             nn.GELU(),
-            nn.BatchNorm1d(out_channels),
+            #nn.BatchNorm1d(out_channels),
         )
         return block
     
