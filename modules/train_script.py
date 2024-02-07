@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     #loss_function = MSELoss(reduction='mean')
-    loss_function = SignalDistortionRatio()
+    loss_function = SignalDistortionRatio().to_device()
 
     print(f'tag:{args.tag}\n')
     print(f'learning rate:{args.lr}\n')
