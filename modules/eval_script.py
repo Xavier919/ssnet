@@ -17,7 +17,6 @@ parser.add_argument('kernel', type=int)
 parser.add_argument('model', type=str)
 args = parser.parse_args()
 
-sdr = SignalDistortionRatio()
 
 if __name__ == "__main__":
 
@@ -39,6 +38,8 @@ if __name__ == "__main__":
     test_set = Samples(X_test, y_test)
 
     test_loader = DataLoader(test_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
+
+    sdr = SignalDistortionRatio().to(device)
 
     results = []
     model.eval()
