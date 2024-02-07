@@ -14,7 +14,8 @@ from model import ssnet
 from sampler import Samples
 from utils import utility_fct
 from torch.nn import MSELoss
-from torchmetrics.audio import SignalDistortionRatio
+from torchmetrics.audio import SignalDistortionRatio, PermutationInvariantTraining
+
 
 
 writer = SummaryWriter()
@@ -60,7 +61,8 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     #loss_function = MSELoss(reduction='mean')
-    loss_function = SignalDistortionRatio().to_device()
+    sdr = SignalDistortionRatio()
+    loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max").to_device()
 
     print(f'tag:{args.tag}\n')
     print(f'learning rate:{args.lr}\n')
@@ -76,11 +78,12 @@ if __name__ == "__main__":
         ssnet_.train()
         train_losses = []
         for X, y in train_loader:
+            size = len(X)
             X = X.cuda()
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
             ssnet_.zero_grad()
-            loss = loss_function(out, y)
+            loss = loss_function(out.view(size,4,-1), y.view(size,4,-1))
             writer.add_scalar("Loss/train", loss, epoch)
             loss.backward()
             optimizer.step()
@@ -90,10 +93,11 @@ if __name__ == "__main__":
         ssnet_.eval()
         valid_losses = []
         for X, y in valid_loader:
+            size = len(X)
             X = X.cuda()
             y = y.cuda()
             out = ssnet_(X)[:,:,:,100:-100]
-            loss = loss_function(out, y)
+            loss = loss_function(out.view(size,4,-1), y.view(size,4,-1))
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss.cpu().detach().numpy())
         print(f'{epoch}_{np.mean(valid_losses)}')
