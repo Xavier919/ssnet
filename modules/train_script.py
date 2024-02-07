@@ -60,9 +60,11 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    #loss_function = MSELoss(reduction='mean')
+    mse = MSELoss(reduction='mean')
     sdr = SignalDistortionRatio()
-    loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max").to_device()
+    #loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max").to_device()
+    loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to_device()
+
 
     print(f'tag:{args.tag}\n')
     print(f'learning rate:{args.lr}\n')
