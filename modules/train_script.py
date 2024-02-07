@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
     #For sdr, objective is to maximize, whereas for mse objective is to minimize
 
-    #loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max")
-    loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min")
+    loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max")
+    #loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min")
 
 
     print(f'tag:{args.tag}\n')
