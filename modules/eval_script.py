@@ -24,26 +24,26 @@ if __name__ == "__main__":
     X_test, y_test = test
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    checkpoint = torch.load(args.model, map_location=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
+    model = ssnet().to(device)
+    checkpoint = torch.load(args.model, map_location=device)
 
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
-        ssnet_ = nn.DataParallel(checkpoint)
-        ssnet_.load_state_dict(checkpoint)
+        model = nn.DataParallel(model)
+        model.load_state_dict(checkpoint)
     else:
         state_dict = {key.replace("module.", ""): value for key, value in checkpoint.items()}
-        checkpoint.load_state_dict(state_dict)
+        model.load_state_dict(state_dict)
     
     test_set = Samples(X_test, y_test)
 
     test_loader = DataLoader(test_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
     results = []
-    ssnet_.eval()
+    model.eval()
     for X, y in test_loader:
         X = X.cuda()
-        out = ssnet_(X)[:,:,:,100:-100].cpu().detach()
+        out = model(X)[:,:,:,100:-100].cpu().detach()
         for out_i, y_i in zip(out,y):
             out_s1, y_s1 = out_i[0,:,:], y_i[0,:,:]
             out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:]
