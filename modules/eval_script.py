@@ -47,10 +47,10 @@ if __name__ == "__main__":
         X = X.cuda()
         out = model(X)[:,:,:,100:-100].cpu().detach()
         for out_i, y_i in zip(out,y):
-            out_s1, y_s1 = out_i[0,:,:], y_i[0,:,:]
-            out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:]
-            out_s3, y_s3 = out_i[2,:,:], y_i[2,:,:]
-            out_s4, y_s4 = out_i[3,:,:], y_i[3,:,:]
+            out_s1, y_s1 = out_i[0,:,:], y_i[0,:,:].cpu().detach()
+            out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:].cpu().detach()
+            out_s3, y_s3 = out_i[2,:,:], y_i[2,:,:].cpu().detach()
+            out_s4, y_s4 = out_i[3,:,:], y_i[3,:,:].cpu().detach()
             sdr1 = sdr(out_s1, y_s1)
             sdr2 = sdr(out_s2, y_s2)
             sdr3 = sdr(out_s3, y_s3)
