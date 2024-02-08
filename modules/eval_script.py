@@ -5,7 +5,7 @@ import numpy as np
 import torch.nn as nn
 import argparse
 import pickle
-from torchmetrics.audio import SignalDistortionRatio
+from torchmetrics.audio import SignalDistortionRatio, SignalNoiseRatio
 from model import ssnet
 from sampler import Samples
 from utils import utility_fct
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     test_loader = DataLoader(test_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
-    sdr = SignalDistortionRatio().to(device)
+    sdr = SignalNoiseRatio().to(device)
 
     results = []
     model.eval()
