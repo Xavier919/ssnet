@@ -55,7 +55,7 @@ if __name__ == "__main__":
             sdr2 = sdr(out_s2, y_s2)
             sdr3 = sdr(out_s3, y_s3)
             sdr4 = sdr(out_s4, y_s4)
-            results.append((sdr1,sdr2,sdr3,sdr4))
+            results.append((sdr1.item(),sdr2.item(),sdr3.item(),sdr4.item()))
             
     print(f'SDR for source 1 (drums): {np.mean([x[0] for x in results])}')
     print(f'SDR for source 2 (bass): {np.mean([x[1] for x in results])}')
