@@ -52,18 +52,13 @@ if __name__ == "__main__":
             out_s3, y_s3 = out_i[2,:,:], y_i[2,:,:].cpu().detach()
             out_s4, y_s4 = out_i[3,:,:], y_i[3,:,:].cpu().detach()
 
-            if any(torch.linalg.det(x).abs() < 1e-9 for x in [out_s1, out_s2, out_s3, out_s4]):
-                continue
+            results.append(sdr(out, y).item())
 
-            sdr1 = sdr(out_s1, y_s1)
-            print(sdr1)
-            sdr2 = sdr(out_s2, y_s2)
-            print(sdr2)
-            sdr3 = sdr(out_s3, y_s3)
-            print(sdr3)
-            sdr4 = sdr(out_s4, y_s4)
-            print(sdr4)
-            results.append((sdr1.item(),sdr2.item(),sdr3.item(),sdr4.item()))
+            #sdr1 = sdr(out_s1, y_s1)
+            #sdr2 = sdr(out_s2, y_s2)
+            #sdr3 = sdr(out_s3, y_s3)
+            #sdr4 = sdr(out_s4, y_s4)
+            #results.append((sdr1.item(),sdr2.item(),sdr3.item(),sdr4.item()))
             
     print(f'SDR for source 1 (drums): {np.mean([x[0] for x in results])}')
     print(f'SDR for source 2 (bass): {np.mean([x[1] for x in results])}')
