@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     test_loader = DataLoader(test_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8)
 
-    sdr = SignalDistortionRatio(load_diag=1e-9).to(device)
+    sdr = SignalDistortionRatio(load_diag=1e-5).to(device)
 
     results = []
     model.eval()
