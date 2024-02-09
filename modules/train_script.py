@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     mse = MSELoss(reduction='mean')
-    loss_function = SignalDistortionRatio(load_diag=1e-5)
+    loss_function = SignalDistortionRatio(load_diag=1e-5).to(device)
 
     #For sdr, objective is to maximize, whereas for mse objective is to minimize
 
