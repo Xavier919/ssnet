@@ -51,6 +51,10 @@ if __name__ == "__main__":
             out_s2, y_s2 = out_i[1,:,:], y_i[1,:,:].cpu().detach()
             out_s3, y_s3 = out_i[2,:,:], y_i[2,:,:].cpu().detach()
             out_s4, y_s4 = out_i[3,:,:], y_i[3,:,:].cpu().detach()
+
+            if any(torch.linalg.det(x).abs() < 1e-9 for x in [out_s1, out_s2, out_s3, out_s4]):
+                continue
+
             sdr1 = sdr(out_s1, y_s1)
             print(sdr1)
             sdr2 = sdr(out_s2, y_s2)
