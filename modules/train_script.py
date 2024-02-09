@@ -92,7 +92,7 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
             train_losses.append(loss.cpu().detach().numpy())
-        print(f'{epoch}_{np.mean(train_losses)}')
+        print(f'{epoch}_{np.nanmean(train_losses)}')
         
         ssnet_.eval()
         valid_losses = []
@@ -103,7 +103,7 @@ if __name__ == "__main__":
             loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss.cpu().detach().numpy())
-        print(f'{epoch}_{np.mean(valid_losses)}')
+        print(f'{epoch}_{np.nanmean(valid_losses)}')
 
         if np.mean(valid_losses) < best_model:
             best_model = np.mean(valid_losses)
