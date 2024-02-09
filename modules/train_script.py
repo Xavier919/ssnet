@@ -61,12 +61,12 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     mse = MSELoss(reduction='mean')
-    sdr = SignalDistortionRatio()
+    sdr = SignalDistortionRatio(load_diag=1e-9)
 
     #For sdr, objective is to maximize, whereas for mse objective is to minimize
 
-    #loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max").to(device)
-    loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
+    loss_function = PermutationInvariantTraining(sdr,mode="speaker-wise", eval_func="max").to(device)
+    #loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
 
 
     print(f'tag:{args.tag}\n')
