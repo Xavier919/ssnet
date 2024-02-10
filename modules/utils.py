@@ -1,4 +1,6 @@
 import torch
+from scipy.fft import fft
+import numpy as np
 
 #add padding on both sides of samples
 def pad_seqs(seqs, num_chan, num_pad=100):
@@ -14,3 +16,10 @@ def utility_fct(Xy):
 
 def transform(x):
     return torch.tensor(x).float()
+
+def transform(x):
+    x_fft = fft(x)
+    x_fft_tensor = torch.tensor(x_fft, dtype=torch.complex64)
+    magnitude = torch.abs(x_fft_tensor)
+    log_magnitude = torch.log1p(magnitude)
+    return log_magnitude.float()

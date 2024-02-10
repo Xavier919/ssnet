@@ -14,6 +14,8 @@ from model import ssnet
 from sampler import Samples
 from utils import utility_fct
 from torch.nn import MSELoss
+from torchmetrics.audio import SignalDistortionRatio, PermutationInvariantTraining
+
 
 
 writer = SummaryWriter()
@@ -26,6 +28,8 @@ parser.add_argument('batch_size', type=int)
 parser.add_argument('epochs', type=int)
 parser.add_argument('lr', type=float)
 parser.add_argument('l2', type=float)
+parser.add_argument('dropout', type=float)
+parser.add_argument('kernel', type=int)
 parser.add_argument('tag', type=str)
 args = parser.parse_args()
 
@@ -38,14 +42,13 @@ if __name__ == "__main__":
     X_train, y_train = train
     X_valid, y_valid = valid
 
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if device.type == 'cuda':
         print(f"Using GPU: {torch.cuda.get_device_name(0)}")
     else:
         print("Using CPU")
 
-    ssnet_ = ssnet().to(device)
+    ssnet_ = ssnet(k=args.kernel, p=args.dropout).to(device)
     if torch.cuda.device_count() > 1:
         print("Using", torch.cuda.device_count(), "GPUs")
         ssnet_ = nn.DataParallel(ssnet_) 
@@ -57,11 +60,20 @@ if __name__ == "__main__":
     valid_loader = DataLoader(valid_set, collate_fn=utility_fct, batch_size=args.batch_size, num_workers=8, shuffle=True)
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
-    loss_function = MSELoss(reduction='mean').to(device)
+    mse = MSELoss(reduction='mean')
+    loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
 
+
+    print(f'tag:{args.tag}\n')
+    print(f'learning rate:{args.lr}\n')
+    print(f'weight decay:{args.l2}\n')
+    print(f'dropout:{args.dropout}\n')
+    print(f'batch size:{args.batch_size}\n')
+    print(f'kernel:{args.kernel}\n')
 
     start_time = time.time()
     best_model = 1.0
+    
     for epoch in range(args.epochs):
         ssnet_.train()
         train_losses = []
@@ -75,7 +87,7 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
             train_losses.append(loss.cpu().detach().numpy())
-        print(f'{epoch}_{np.mean(train_losses)}')
+        print(f'{epoch}_{np.nanmean(train_losses)}')
         
         ssnet_.eval()
         valid_losses = []
@@ -86,7 +98,7 @@ if __name__ == "__main__":
             loss = loss_function(out, y)
             valid_writer.add_scalar("Loss/valid", loss, epoch)
             valid_losses.append(loss.cpu().detach().numpy())
-        print(f'{epoch}_{np.mean(valid_losses)}')
+        print(f'{epoch}_{np.nanmean(valid_losses)}')
 
         if np.mean(valid_losses) < best_model:
             best_model = np.mean(valid_losses)

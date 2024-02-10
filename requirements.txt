@@ -8,3 +8,5 @@ tensorboard
 torchmetrics
 ffmpeg
 ffmpeg-python
+tqdm
+librosa
