@@ -18,7 +18,7 @@ class ssnet(nn.Module):
         self.conv4 = self.conv_block(128, 256, k=k)
         self.conv5 = self.conv_block(256, 512, k=k)
         self.conv6 = self.conv_block(512, 1024, k=k)
-        self.convb = self.conv_block(512, 512, k=k)
+        self.convb = self.conv_block(1024, 1024, k=k)
         # Decoder convolutional blocks
         self.dconv5 = self.conv_block(1024, 512, k=k)
         self.dconv4 = self.conv_block(512, 256, k=k)
@@ -144,5 +144,3 @@ class ssnet(nn.Module):
         )
         return block
     
-
-#next try not batchnorm, and reg conv
