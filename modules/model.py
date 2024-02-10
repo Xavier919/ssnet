@@ -17,17 +17,17 @@ class ssnet(nn.Module):
         self.conv3 = self.conv_block(64, 128, k=k)
         self.conv4 = self.conv_block(128, 256, k=k)
         self.conv5 = self.conv_block(256, 512, k=k)
-        #self.conv6 = self.conv_block(512, 1024, k=k)
+        self.conv6 = self.conv_block(512, 1024, k=k)
         self.convb = self.conv_block(512, 512, k=k)
         # Decoder convolutional blocks
-        #self.dconv5 = self.conv_block(1024, 512, k=k)
+        self.dconv5 = self.conv_block(1024, 512, k=k)
         self.dconv4 = self.conv_block(512, 256, k=k)
         self.dconv3 = self.conv_block(256, 128, k=k)
         self.dconv2 = self.conv_block(128, 64, k=k)
         self.dconv1 = self.conv_block(64, 32, k=k)
         self.dconvf = self.final_block(32, 8)
         # Decoder upsampling operations
-        #self.upsample5 = nn.ConvTranspose1d(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
+        self.upsample5 = nn.ConvTranspose1d(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
         self.upsample4 = nn.ConvTranspose1d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
         self.upsample3 = nn.ConvTranspose1d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
         self.upsample2 = nn.ConvTranspose1d(in_channels=128, out_channels=64, kernel_size=2, stride=2)
@@ -66,9 +66,9 @@ class ssnet(nn.Module):
         x = self.dropout(x)
 
         #encoder layer 6
-        #block6 = self.conv6(x) 
-        #x = block6
-        #x = self.dropout(x)
+        block6 = self.conv6(x) 
+        x = block6
+        x = self.dropout(x)
 
         #encoder bottleneck layer
         block7 = self.convb(x) 
@@ -76,11 +76,11 @@ class ssnet(nn.Module):
         x = self.dropout(x)
 
         #decoder layer 5
-        #upsamp5 = self.upsample5(x)
-        #upsamp5 = F.interpolate(upsamp5, block5.shape[2])
-        #cat5 = torch.cat((upsamp5, block5), 1)
-        #x = self.dconv5(cat5)
-        #x = self.dropout(x)
+        upsamp5 = self.upsample5(x)
+        upsamp5 = F.interpolate(upsamp5, block5.shape[2])
+        cat5 = torch.cat((upsamp5, block5), 1)
+        x = self.dconv5(cat5)
+        x = self.dropout(x)
 
         #decoder layer 4
         upsamp4 = self.upsample4(x)
@@ -120,20 +120,18 @@ class ssnet(nn.Module):
     @staticmethod
     def conv_block(in_channels, out_channels, k=5):
         block = nn.Sequential(
-            #nn.Conv1d(in_channels, in_channels, kernel_size=k, groups=in_channels, padding='same'),
-            #nn.Conv1d(in_channels, out_channels, kernel_size=1),
-            nn.Conv1d(in_channels, out_channels, kernel_size=k, padding='same'),
+            nn.Conv1d(in_channels, in_channels, kernel_size=k, groups=in_channels, padding='same'),
+            nn.Conv1d(in_channels, out_channels, kernel_size=1),
             nn.GELU(),
             nn.BatchNorm1d(out_channels),
-            #nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
-            #nn.Conv1d(out_channels, out_channels, kernel_size=1),
-            nn.Conv1d(out_channels, out_channels, kernel_size=k, padding='same'),
+            nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
+            nn.Conv1d(out_channels, out_channels, kernel_size=1),
             nn.GELU(),
             nn.BatchNorm1d(out_channels),
-            #nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
-            #nn.Conv1d(out_channels, out_channels, kernel_size=1, padding='same'),
-            #nn.GELU(),
-            #nn.BatchNorm1d(out_channels),
+            nn.Conv1d(out_channels, out_channels, kernel_size=k, groups=out_channels, padding='same'),
+            nn.Conv1d(out_channels, out_channels, kernel_size=1, padding='same'),
+            nn.GELU(),
+            nn.BatchNorm1d(out_channels),
         )
         return block
 

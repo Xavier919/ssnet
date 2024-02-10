@@ -14,7 +14,7 @@ from model import ssnet
 from sampler import Samples
 from utils import utility_fct
 from torch.nn import MSELoss
-from torchmetrics.audio import SignalDistortionRatio, PermutationInvariantTraining
+from torchmetrics.audio import SignalNoiseRatio, PermutationInvariantTraining
 
 
 
@@ -61,7 +61,9 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     mse = MSELoss(reduction='mean')
-    loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
+    snr = SignalNoiseRatio()
+    #loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
+    loss_function = PermutationInvariantTraining(snr,mode="speaker-wise", eval_func="max").to(device)
 
 
     print(f'tag:{args.tag}\n')
