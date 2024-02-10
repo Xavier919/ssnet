@@ -6,3 +6,5 @@ matplotlib
 musdb
 tensorboard
 torchmetrics
+ffmpeg
+ffmpeg-python
