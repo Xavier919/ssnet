@@ -61,9 +61,9 @@ if __name__ == "__main__":
 
     optimizer = optim.Adam(ssnet_.parameters(),lr=args.lr, weight_decay=args.l2)
     mse = MSELoss(reduction='mean')
-    snr = SignalNoiseRatio()
-    #loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
-    loss_function = PermutationInvariantTraining(snr,mode="speaker-wise", eval_func="max").to(device)
+    #snr = SignalNoiseRatio()
+    loss_function = PermutationInvariantTraining(mse,mode="speaker-wise", eval_func="min").to(device)
+    #loss_function = PermutationInvariantTraining(snr,mode="speaker-wise", eval_func="max").to(device)
 
 
     print(f'tag:{args.tag}\n')
