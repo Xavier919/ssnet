@@ -24,7 +24,14 @@ def process_audio(mus, tag, frame_length=30000):
             # Extract the frames for mixture and target
             mixture_frame = transform(mixture_audio[:, start_idx:start_idx+frame_length])
             target_frame = transform(target[:,:,start_idx:start_idx+frame_length])
+            samples.append(mixture_frame)
+            targets.append(target_frame)
 
+        # Iterate over the audio in chunks of 'frame_length', starting at timestep 15000
+        for start_idx in range(15000, mixture_audio.shape[1] - frame_length + 1, frame_length):
+            # Extract the frames for mixture and target
+            mixture_frame = transform(mixture_audio[:, start_idx:start_idx+frame_length])
+            target_frame = transform(target[:,:,start_idx:start_idx+frame_length])
             samples.append(mixture_frame)
             targets.append(target_frame)
     
