@@ -6,6 +6,7 @@ from build_dataset import process_audio
 parser = argparse.ArgumentParser()
 parser.add_argument('data_path', type=str)
 parser.add_argument('frame_length', type=int)
+parser.add_argument('init_frame', type=int)
 args = parser.parse_args()
 
 
@@ -19,7 +20,8 @@ if __name__ == "__main__":
     mus_test = musdb.DB(subsets="test")
 
     FRAME_LENGTH = args.frame_length
+    INIT_FRAME = args.init_frame
 
-    X_train, y_train = process_audio(mus_train, tag='train', frame_length=FRAME_LENGTH)
-    X_valid, y_valid = process_audio(mus_valid, tag='valid', frame_length=FRAME_LENGTH)
-    X_test, y_test = process_audio(mus_test, tag='test', frame_length=FRAME_LENGTH)
+    X_train, y_train = process_audio(mus_train, tag='train', frame_length=FRAME_LENGTH, init_frame=INIT_FRAME)
+    X_valid, y_valid = process_audio(mus_valid, tag='valid', frame_length=FRAME_LENGTH, init_frame=INIT_FRAME)
+    X_test, y_test = process_audio(mus_test, tag='test', frame_length=FRAME_LENGTH, init_frame=INIT_FRAME)
