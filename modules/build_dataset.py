@@ -11,7 +11,7 @@ def process_audio(mus, tag, frame_length=30000, init_frame=0):
     :param frame_length: Length of each audio frame to process.
     :return: full audio mixture and target source 
     """
-    half_frame = frame_length/2
+    half_frame = int(frame_length/2)
     samples = []
     targets = []
 
