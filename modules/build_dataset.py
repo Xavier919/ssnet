@@ -11,6 +11,7 @@ def process_audio(mus, tag, frame_length=30000, init_frame=0):
     :param frame_length: Length of each audio frame to process.
     :return: full audio mixture and target source 
     """
+    half_frame = frame_length/2
     samples = []
     targets = []
 
@@ -28,7 +29,7 @@ def process_audio(mus, tag, frame_length=30000, init_frame=0):
             targets.append(target_frame)
 
         # Iterate over the audio in chunks of 'frame_length'
-        for start_idx in range(init_frame+(frame_length/2), mixture_audio.shape[1] - init_frame, frame_length):
+        for start_idx in range(init_frame+half_frame, mixture_audio.shape[1] - init_frame, frame_length):
             # Extract the frames for mixture and target
             mixture_frame = transform(mixture_audio[:, start_idx:start_idx+frame_length])
             target_frame = transform(target[:,:,start_idx:start_idx+frame_length])
